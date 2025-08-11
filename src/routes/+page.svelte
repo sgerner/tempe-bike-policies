@@ -216,9 +216,9 @@
 	<header class="mb-8 text-center">
 		<h1 class="h1 font-bold">Tempe Bicycle Safety Policies</h1>
 		<p class="mx-auto mt-2 max-w-3xl text-lg">
-			Help shape the future of safe cycling in Tempe. Please select exactly 2 "Act Now" priorities
-			that need to be done immediately and 3 "Do Soon" priorities that should be done within the
-			next year from the proposals below. You can also add your own proposals. Email
+			Help shape the future of safe cycling in Tempe. Please select exactly 2 Top Priorities that
+			need to be done immediately and 3 Secondary Priorities that should be done soon from the
+			proposals below. You can also add your own proposals. Email
 			<a class="anchor" href="mailto:info@biketempe.org">info@biketempe.org</a> with any questions or
 			suggestions.
 		</p>
@@ -287,11 +287,7 @@
 			class="mt-4 textarea preset-filled-primary-500"
 			rows="4"
 		></textarea>
-		<select
-			bind:value={newPolicy.category}
-			class="select mt-4 preset-filled-primary-500"
-			required
-		>
+		<select bind:value={newPolicy.category} class="select mt-4 preset-filled-primary-500" required>
 			<option value="" disabled>Select a category</option>
 			{#each Object.keys(categoryColors) as category}
 				<option value={category}>{category}</option>
@@ -324,7 +320,7 @@
 					<div class="mb-2 grid grid-cols-1 gap-4 pl-8 md:grid-cols-2">
 						<div>
 							<h4 class="font-bold">
-								Immediate ({immediate.length}
+								Top Priorities ({immediate.length}
 								/ 2)
 							</h4>
 							<ul class="space-y-1">
@@ -341,7 +337,7 @@
 						</div>
 						<div>
 							<h4 class="font-bold">
-								Soon ({next.length}
+								Secondary Priorities ({next.length}
 								/ 3)
 							</h4>
 							<ul class="space-y-1">
