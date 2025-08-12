@@ -197,7 +197,15 @@
 		});
 	}
 
+	let showSubmit = $state(false);
+
 	onMount(() => {
+		const mediaQuery = window.matchMedia('(min-width: 768px)');
+		showSubmit = mediaQuery.matches;
+
+		const mediaQueryListener = (e) => (showSubmit = e.matches);
+		mediaQuery.addEventListener('change', mediaQueryListener);
+
 		if (PUBLIC_GOOGLE_MAPS_API_KEY) {
 			window.initAutocomplete = initAutocomplete;
 
@@ -207,6 +215,10 @@
 			script.defer = true;
 			document.head.appendChild(script);
 		}
+
+		return () => {
+			mediaQuery.removeEventListener('change', mediaQueryListener);
+		};
 	});
 </script>
 
@@ -307,107 +319,138 @@
 		</button>
 	</div>
 
-	<div class="sticky bottom-0 backdrop-blur-sm">
-		<div class="container mx-auto">
-			{#if submissionSuccess}
-				<div class="card rounded-2xl bg-success-500/20 p-2 pb-0 text-center">
-					<h2 class="h2 text-success-500">Thank You!</h2>
-					<p class="mt-2">Your priorities have been submitted. We appreciate your input.</p>
-				</div>
-			{:else}
-				<div class="rounded-t-2xl border-1 border-surface-500/50 bg-tertiary-500/20 p-2 shadow-lg">
-					<h3 class="mb-2 text-center h3">Submit Your Priorities</h3>
-					<div class="mb-2 grid grid-cols-1 gap-4 pl-8 md:grid-cols-2">
-						<div>
-							<h4 class="font-bold">
-								Top Priorities ({immediate.length}
-								/ 2)
-							</h4>
-							<ul class="space-y-1">
-								{#each immediatePolicies as policy (policy.id)}
-									<li>
-										🚲 {policy.title}
-										<button
-											class="btn preset-filled-surface-500 btn-sm !px-2 !py-0"
-											onclick={() => remove(policy.id, 'immediate')}>X</button
-										>
-									</li>
-								{/each}
-							</ul>
-						</div>
-						<div>
-							<h4 class="font-bold">
-								Secondary Priorities ({next.length}
-								/ 3)
-							</h4>
-							<ul class="space-y-1">
-								{#each nextPolicies as policy (policy.id)}
-									<li>
-										🚲 {policy.title}
-										<button
-											class="btn preset-filled-surface-500 btn-sm !px-2 !py-0"
-											onclick={() => remove(policy.id, 'next')}>X</button
-										>
-									</li>
-								{/each}
-							</ul>
-						</div>
-					</div>
-					<form onsubmit={handleSubmit} class="space-y-4">
-						<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-							<input
-								class="input preset-filled-primary-50-950"
-								bind:value={submission.name}
-								type="text"
-								placeholder="Your Name"
-								required
-							/>
-							<input
-								class="input preset-filled-primary-50-950"
-								bind:value={submission.email}
-								type="email"
-								placeholder="Your Email"
-								required
-							/>
-							<input
-								bind:this={addressInput}
-								bind:value={submission.address}
-								type="text"
-								placeholder="Your Address"
-								class="input preset-filled-primary-50-950"
-								required
-							/>
-						</div>
-						<input
-							type="text"
-							name="special-field"
-							bind:value={submission.honeypot}
-							class="absolute -z-10 opacity-0"
-							tabindex="-1"
-							autocomplete="off"
-						/>
-
-						<button
-							type="submit"
-							class="btn w-full rounded-2xl preset-filled-success-500"
-							disabled={!canSubmit || isSubmitting}
-						>
-							{#if isSubmitting}
-								<span>Submitting...</span>
-							{:else}
-								<span>Submit Priorities</span>
-							{/if}
-						</button>
-						{#if submissionError}
-							<p class="text-center text-error-500">{submissionError}</p>
-						{/if}
-						<p class="text-base-content/60 text-center text-xs">
-							By submitting, you consent to us storing your name, email, address, and policy
-							preferences for analysis and outreach.
-						</p>
-					</form>
-				</div>
-			{/if}
+	{#if !showSubmit}
+		<div class="fixed right-4 bottom-4 z-10 md:hidden">
+			<button
+				class="btn border-1 border-surface-500/50 bg-tertiary-500/50 backdrop-blur-sm"
+				onclick={() => (showSubmit = true)}
+			>
+				Submit Priorities
+			</button>
 		</div>
-	</div>
+	{/if}
+
+	{#if showSubmit}
+		<div class="sticky bottom-0 backdrop-blur-sm">
+			<div class="container mx-auto">
+				{#if submissionSuccess}
+					<div class="card rounded-2xl bg-success-500/20 p-2 pb-0 text-center">
+						<h2 class="h2 text-success-500">Thank You!</h2>
+						<p class="mt-2">Your priorities have been submitted. We appreciate your input.</p>
+					</div>
+				{:else}
+					<div
+						class="rounded-t-2xl border-1 border-surface-500/50 bg-tertiary-500/20 p-2 shadow-lg"
+					>
+						<div class="flex justify-between">
+							<h3 class="mb-2 text-center h3">Submit Your Priorities</h3>
+							<button class="btn-icon md:hidden" onclick={() => (showSubmit = false)}>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-x"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+								>
+							</button>
+						</div>
+						<div class="mb-2 grid grid-cols-1 gap-4 pl-8 md:grid-cols-2">
+							<div>
+								<h4 class="font-bold">
+									Top Priorities ({immediate.length}
+									/ 2)
+								</h4>
+								<ul class="space-y-1">
+									{#each immediatePolicies as policy (policy.id)}
+										<li>
+											🚲 {policy.title}
+											<button
+												class="btn preset-filled-surface-500 btn-sm !px-2 !py-0"
+												onclick={() => remove(policy.id, 'immediate')}>X</button
+											>
+										</li>
+									{/each}
+								</ul>
+							</div>
+							<div>
+								<h4 class="font-bold">
+									Secondary Priorities ({next.length}
+									/ 3)
+								</h4>
+								<ul class="space-y-1">
+									{#each nextPolicies as policy (policy.id)}
+										<li>
+											🚲 {policy.title}
+											<button
+												class="btn preset-filled-surface-500 btn-sm !px-2 !py-0"
+												onclick={() => remove(policy.id, 'next')}>X</button
+											>
+										</li>
+									{/each}
+								</ul>
+							</div>
+						</div>
+						<form onsubmit={handleSubmit} class="space-y-4">
+							<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+								<input
+									class="input preset-filled-primary-50-950"
+									bind:value={submission.name}
+									type="text"
+									placeholder="Your Name"
+									required
+								/>
+								<input
+									class="input preset-filled-primary-50-950"
+									bind:value={submission.email}
+									type="email"
+									placeholder="Your Email"
+									required
+								/>
+								<input
+									bind:this={addressInput}
+									bind:value={submission.address}
+									type="text"
+									placeholder="Your Address"
+									class="input preset-filled-primary-50-950"
+									required
+								/>
+							</div>
+							<input
+								type="text"
+								name="special-field"
+								bind:value={submission.honeypot}
+								class="absolute -z-10 opacity-0"
+								tabindex="-1"
+								autocomplete="off"
+							/>
+
+							<button
+								type="submit"
+								class="btn w-full rounded-2xl preset-filled-success-500"
+								disabled={!canSubmit || isSubmitting}
+							>
+								{#if isSubmitting}
+									<span>Submitting...</span>
+								{:else}
+									<span>Submit Priorities</span>
+								{/if}
+							</button>
+							{#if submissionError}
+								<p class="text-center text-error-500">{submissionError}</p>
+							{/if}
+							<p class="text-base-content/60 text-center text-xs">
+								By submitting, you consent to us storing your name, email, address, and policy
+								preferences for analysis and outreach.
+							</p>
+						</form>
+					</div>
+				{/if}
+			</div>
+		</div>
+	{/if}
 </div>
