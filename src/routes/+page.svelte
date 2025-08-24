@@ -5,6 +5,7 @@
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
 	import { fade } from 'svelte/transition';
 	import { toaster } from '$lib/toaster-svelte';
+	import Chatbot from '$lib/components/Chatbot.svelte';
 
 	let { data } = $props();
 
@@ -235,6 +236,10 @@
 			suggestions.
 		</p>
 	</header>
+
+	<div class="mb-8">
+		<Chatbot bind:immediate bind:next policies={allPolicies} />
+	</div>
 
 	<div class="mb-8">
 		<input
