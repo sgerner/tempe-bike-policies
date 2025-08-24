@@ -63,7 +63,7 @@
 						role: 'assistant',
 						content: `I've selected some priorities for you. If you like these choices, click submit, otherwise select your own policies. <br /><br /> ${justification}`,
 						htmlContent: `I've selected some priorities for you. If you like these choices, click submit, otherwise select your own policies. <br /><br /> ${parsedJustification}`,
-						name: 'AI Assistant',
+						name: 'Bike Bot',
 						avatar: 'https://i.pravatar.cc/?img=14',
 						timestamp: new Date().toLocaleString()
 					}
@@ -78,7 +78,7 @@
 				{
 					role: 'assistant',
 					content: 'Sorry, I had trouble understanding that. Please try again.',
-					name: 'AI Assistant',
+					name: 'Bike Bot',
 					avatar: 'https://i.pravatar.cc/?img=14',
 					timestamp: new Date().toLocaleString()
 				}
@@ -91,7 +91,7 @@
 </script>
 
 <div class="card rounded-2xl preset-filled-primary-100-900 p-6 shadow-md">
-	<h2 class="mb-4 h2">AI Assistant</h2>
+	<h2 class="mb-4 h2">Bike Bot <span class="text-xs">(powered by AI)</span></h2>
 	<div class="max-h-[400px] w-full space-y-4 overflow-y-auto">
 		{#each conversation as bubble (bubble.timestamp)}
 			{#if bubble.role === 'user'}
