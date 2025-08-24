@@ -227,14 +227,20 @@
 
 <div class="container mx-auto p-4 md:p-8">
 	<header class="mb-8 text-center">
+		<img src="/tbag.jpg" alt="TBAG Logo" class="mx-auto mb-4 h-24" />
 		<h1 class="h1 font-bold">Tempe Bicycle Safety Policies</h1>
-		<p class="mx-auto mt-2 max-w-3xl text-lg">
-			Help shape the future of safe cycling in Tempe. Please select exactly 2 Top Priorities that
-			need to be done immediately and 3 Secondary Priorities that should be done soon from the
-			proposals below. You can also add your own proposals. Email
-			<a class="anchor" href="mailto:info@biketempe.org">info@biketempe.org</a> with any questions or
-			suggestions.
-		</p>
+		<div class="mx-auto mt-2 max-w-3xl text-center text-lg">
+			<p class="mb-4">
+				Help shape the future of safe cycling in Tempe! Here's how you can contribute:
+			</p>
+			<p>✅ Select <strong>2 Top Priorities</strong> for immediate action.</p>
+			<p>✅ Select up to <strong>3 Secondary Priorities</strong> to be done soon.</p>
+			<p class="mt-4 text-base">
+				Questions? Suggestions? Email <a class="anchor" href="mailto:info@biketempe.org"
+					>info@biketempe.org</a
+				>.
+			</p>
+		</div>
 	</header>
 
 	<div class="mb-8">
@@ -345,7 +351,7 @@
 					</div>
 				{:else}
 					<div
-						class="rounded-t-2xl border-1 border-surface-500/50 bg-tertiary-500/20 p-2 shadow-lg"
+						class="rounded-t-2xl border-1 border-surface-500/50 bg-tertiary-500/50 p-2 shadow-lg"
 					>
 						<div class="flex justify-between">
 							<h3 class="mb-2 text-center h3">Submit Your Priorities</h3>
